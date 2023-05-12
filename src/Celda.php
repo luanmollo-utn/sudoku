@@ -10,7 +10,7 @@ class Celda{
 
     }
     public function getNum(){
-        return $this->Num;
+        return $this->num;
     }
     public function getMostrar(){
         return $this->mostrar;
@@ -19,7 +19,7 @@ class Celda{
         $this->num= $num;
     }
     public function setMostrar($mostrar){
-        $this->mostrar=mostrar;
+        $this->mostrar=$mostrar;
     }
 }
 
