@@ -1,4 +1,5 @@
-var inputs = document.querySelectorAll('input');
+
+    var inputs = document.querySelectorAll('input');
     var inputValues = [];
     var inputFocus= [];
     let fila=[];
@@ -24,10 +25,18 @@ var inputs = document.querySelectorAll('input');
     }
     contador=0;
     for($i=0;$i<9;$i++){
-     inputFocus[$i][indiceFocus[1]].style.border = "2px solid yellow";
+      
+     inputFocus[$i][indiceFocus[1]].classList.add('custom-input-focus');
     }
     for($j=0;$j<9;$j++){
-      inputFocus[indiceFocus[0]][$j].style.border = "2px solid yellow";
+      inputFocus[indiceFocus[0]][$j].classList.add('custom-input-focus');
+     }
+
+     for($i=Math.floor(indiceFocus[0]/3)*3;$i<Math.floor(indiceFocus[0]/3)*3+3;$i++){
+      for($j=Math.floor(indiceFocus[1]/3)*3;$j<Math.floor(indiceFocus[1]/3)*3+3;$j++){
+        inputFocus[$i][$j].classList.add('custom-input-focus');
+      }
+
      }
 
     }))
@@ -49,15 +58,21 @@ var inputs = document.querySelectorAll('input');
     }
     contador=0;
     for($i=0;$i<9;$i++){
-     inputFocus[$i][indiceFocus[1]].style.border = "0";
+     inputFocus[$i][indiceFocus[1]].classList.remove('custom-input-focus');
     }
     for($j=0;$j<9;$j++){
-      inputFocus[indiceFocus[0]][$j].style.border = "0";
+      inputFocus[indiceFocus[0]][$j].classList.remove('custom-input-focus');
      }
 
-    }));
+     for($i=Math.floor(indiceFocus[0]/3)*3;$i<Math.floor(indiceFocus[0]/3)*3+3;$i++){
+      for($j=Math.floor(indiceFocus[1]/3)*3;$j<Math.floor(indiceFocus[1]/3)*3+3;$j++){
+        inputFocus[$i][$j].classList.remove('custom-input-focus');
+      }
 
-inputs.forEach((input,index)=>input.addEventListener('keyup',()=>{
+     }
+    }));
+    
+    inputs.forEach((input,index)=>input.addEventListener('keyup',()=>{
         console.log(index);
         //indexEvent=index;
         for(let i=0;i<9;i++){
@@ -89,7 +104,7 @@ inputs.forEach((input,index)=>input.addEventListener('keyup',()=>{
               }else{
                 inputs[modifiedIndex[0]*9+modifiedIndex[1]].style.color="black";
                 if(!Array.from(inputs).some(input=>input.value=='')){
-                  alert("Has ganado!!!!!");
+                  alert("has ganado");
                 }
               }
             }
@@ -97,6 +112,39 @@ inputs.forEach((input,index)=>input.addEventListener('keyup',()=>{
           //modifiedIndex=[];
     }
     
-    ));
-
-modifiedIndex=[];
+    )); 
+   // console.log(contador);
+   
+   /* for(let i=0;i<9;i++){
+        for(let j=0;j<9;j++){
+            fila[j]=inputs[contador].value;    
+    if(indexEvent==contador){
+        modifiedIndex.push(i);
+        modifiedIndex.push(j);
+    }
+              contador++;
+        }
+        inputValues[i]=fila;
+        fila=[];
+    }*/
+    
+   /* inputs.forEach(function(input) {
+      inputValues.push(input.value);
+    });*/
+    
+    // Realiza la solicitud AJAX a tu archivo PHP
+   /* $.ajax({
+      url: '../validar.php', // Ruta al archivo PHP
+      method: 'POST',
+      data: {  input_values: inputValues,
+        modified_index: modifiedIndex}, // Envía los valores de los inputs a PHP
+      success: function(response) {
+        // Aquí puedes manejar la respuesta de PHP
+        console.log(response);
+      }
+    });*/
+    modifiedIndex=[];
+    
+    
+  
+  
