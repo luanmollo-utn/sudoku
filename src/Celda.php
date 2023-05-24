@@ -1,26 +1,29 @@
 <?php
-class Celda{
-//atributos
+
+class Celda {
+    //put your code here
     private $num;
     private $mostrar;
-
-//metodos
-
-    public function __contruct(){
-
+    
+    public function __construct() {
+       
     }
-    public function getNum(){
+
+    public function getNum() {
         return $this->num;
     }
-    public function getMostrar(){
+
+    public function getMostrar() {
         return $this->mostrar;
     }
-    public function setNum($num){
-        $this->num= $num;
-    }
-    public function setMostrar($mostrar){
-        $this->mostrar=$mostrar;
-    }
-}
 
-?>
+    public function setNum($num){
+        $this->num = $num;
+    }
+
+    public function setMostrar($mostrar): void {
+        $this->mostrar = $mostrar;
+    }
+
+
+}
