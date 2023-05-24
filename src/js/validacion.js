@@ -89,7 +89,7 @@ inputs.forEach((input,index)=>input.addEventListener('keyup',()=>{
               }else{
                 inputs[modifiedIndex[0]*9+modifiedIndex[1]].style.color="black";
                 if(!Array.from(inputs).some(input=>input.value=='')){
-                  alert("has ganado");
+                  alert("Has ganado!!!!!");
                 }
               }
             }
