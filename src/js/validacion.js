@@ -56,3 +56,47 @@ var inputs = document.querySelectorAll('input');
      }
 
     }));
+
+inputs.forEach((input,index)=>input.addEventListener('keyup',()=>{
+        console.log(index);
+        //indexEvent=index;
+        for(let i=0;i<9;i++){
+            for(let j=0;j<9;j++){
+              inputs[contador].value==""?fila[j]=0:fila[j]=parseInt(inputs[contador].value);    
+        if(index==contador){
+            modifiedIndex.push(i);
+            modifiedIndex.push(j);
+        }
+                  contador++;
+            }
+            inputValues[i]=fila;
+            fila=[];
+        }
+        contador=0;
+        console.log(inputValues);
+        console.log(modifiedIndex);
+        $.ajax({
+            url: '../validar.php', // Ruta al archivo PHP
+            method: 'POST',
+            data: {  input_values: inputValues,
+              modified_index: modifiedIndex}, // Envía los valores de los inputs a PHP
+            success: function(response) {
+              // Aquí puedes manejar la respuesta de PHP
+              console.log(response);
+              if(response==""){
+                console.log(modifiedIndex);
+                inputs[modifiedIndex[0]*9+modifiedIndex[1]].style.color="red";
+              }else{
+                inputs[modifiedIndex[0]*9+modifiedIndex[1]].style.color="black";
+                if(!Array.from(inputs).some(input=>input.value=='')){
+                  alert("has ganado");
+                }
+              }
+            }
+          });
+          //modifiedIndex=[];
+    }
+    
+    ));
+
+modifiedIndex=[];
