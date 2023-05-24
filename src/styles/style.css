@@ -1,0 +1,12 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: content-box;
+}
+
+input[readonly]{
+    background-color: rgba(41, 126, 41, 0.87);
+    color:black;
+    
+}
+
