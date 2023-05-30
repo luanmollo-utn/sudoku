@@ -122,13 +122,14 @@ btnResolver.addEventListener("click", (e) => {
   e.preventDefault()
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
-      inputs[contador].value == "" ? fila[j] = 0 : fila[j] = parseInt(inputs[contador].value);
+      inputs[contador].readOnly ? fila[j] = parseInt(inputs[contador].value):fila[j] = 0;
       contador++;
     }
     inputValues[i] = fila;
     fila = [];
   }
   contador = 0;
+  c/*onsole.log(inputValues);*/
   $.ajax({
     url: '../resolver.php', // Ruta al archivo PHP
     method: 'POST',
