@@ -5,23 +5,21 @@
 }
 
 input[readonly]{
-    background-color: rgba(62, 230, 132, 0.87);
-    color:black;
+    background-color: rgba(135, 62, 230, 0.87);
+    color:lightgray;
+    font-weight: bold;
     
 }
 
-/*.custom-input {
-    outline: none;
-  }
-  
-  .custom-input:focus {
-    outline-color: red;
-  }*/
 
   .custom-input {
-    outline: 1px solid #ccc;
+    outline: 2px solid #ccc;
+    width:2rem;
+    height: 2rem;
+    font-weight: bold;
   }
   
   .custom-input-focus {
-    outline-color: rgb(211, 51, 51);
+   outline-color: orange;
+    /*background-color: lightgray;*/
   }

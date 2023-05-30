@@ -141,7 +141,7 @@ btnResolver.addEventListener("click", (e) => {
       let divBtn = document.createElement("div");
       let btnJugar=document.createElement("button");
       btnJugar.textContent="Volver a Jugar";
-      btnJugar.classList.add("btn","btn-primary");
+      btnJugar.classList.add("btn","btn-warning");
       btnJugar.setAttribute("id","volverAJugar");
       divBtn.appendChild(btnJugar);
       form.innerHTML = "";

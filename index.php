@@ -8,9 +8,9 @@
         <title>Sudoku</title>
     </head>
 
-    <body class="bg-primary">
+    <body class="bg-dark">
         <main class="d-flex align-items-center flex-column ">
-            <h1 class="text-center text-white my-3">Sudoku</h1>
+            <h1 class="text-center text-white my-3">SUDOKU</h1>
             
             <?php
             require_once './src/Celda.php';
