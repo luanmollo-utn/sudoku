@@ -101,8 +101,10 @@
               if(response==""){
                 console.log(modifiedIndex);
                 inputs[modifiedIndex[0]*9+modifiedIndex[1]].style.color="red";
+                modifiedIndex=[];
               }else{
                 inputs[modifiedIndex[0]*9+modifiedIndex[1]].style.color="black";
+                modifiedIndex=[];
                 if(!Array.from(inputs).some(input=>input.value=='')){
                   alert("has ganado");
                 }
