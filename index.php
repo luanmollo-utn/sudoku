@@ -67,6 +67,12 @@
                 array(8, 0, 0, 2, 0, 3, 0, 0, 9),
                 array(0, 0, 5, 0, 1, 0, 3, 0, 0)
             );
+           /* $tablero=new Tablero();
+$tablero->llenarTablero($sudoku);
+$tablero->resolverSudoku(0,0,0,0);
+$response=$tablero->imprimirSudokuOB();
+echo json_encode($response);*/
+
             /*$sudoku = array(
                 array(0, 2, 3, 4, 5, 6, 7, 8, 9),
                 array(4, 5, 6, 7, 8, 9, 1, 2, 3),
@@ -79,7 +85,7 @@
                 array(8, 9, 1, 2, 3, 4, 5, 6, 7)
             );*/
             ?>
-            <form class=" col-9 d-flex flex-column align-items-center gap-2 mt-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+            <form id="tablero" class=" col-9 d-flex flex-column align-items-center gap-2 mt-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <?php
                 for ($i = 0; $i < 9; $i++) {
                     ?>
@@ -93,7 +99,7 @@
                     onKeypress="if (event.keyCode < 49 || event.keyCode > 57) event.returnValue = false;" maxlength="1" value="<?php if($sudoku[$i][$j]!=0){
                     echo $sudoku[$i][$j];
                     }
-                    ?>" required pattern="[1-9]{1}"
+                    ?>" 
                     <?php if($sudoku[$i][$j]!=0){
                         ?> readonly<?php
                     }?>
@@ -104,7 +110,8 @@
                     <?php
                 }
                 ?>
-                <button type="reset"class="btn btn-danger my-3">Reset</button>
+               <div> <button id="reset" type="reset"class="btn btn-danger my-3">Reset</button>
+                <button id="resolver" class="btn btn-success my-3">Resolver sudoku</button> </div>
             </form>
            
             

@@ -16,38 +16,29 @@ class Tablero
         return $this->arregloCuadricula;
     }
 
-    function imprimirSudokuOB()
+    public function imprimirSudokuOB()
     {
-       /* for ($i = 0; $i < 3; $i++) {
-            for ($j = 0; $j < 3; $j++) {
-                $this->arregloCuadricula[$i][$j]->imprimirCuadricula();
-            }
-            echo '|||';
-            if($i<3){
-                echo "============================================" . '<br>';
-           }
-        }*/
-
+        $sudokuArreglo=array();
+        $sudokuFila=array();
+      $contCol=0;
         for ($filaTab = 0; $filaTab < 3; $filaTab++) {
             for ($filaOb = 0; $filaOb < 3; $filaOb++) {
             
                 for ($colTab = 0; $colTab < 3; $colTab++) {
-                    echo "||";
+                   
                     for ($colOb = 0; $colOb < 3; $colOb++) {
-                        echo $this->arregloCuadricula[$filaTab][$colTab]->getArregloCeldas()[$filaOb][$colOb]->getNum()."||";
-                        
+                        array_push($sudokuFila,$this->arregloCuadricula[$filaTab][$colTab]->getArregloCeldas()[$filaOb][$colOb]->getNum());
+                        $contCol++;
                     }
-                    echo "  ";
+                    
                 }
-                if($filaOb<3){
-                    echo "<br>";
-                }
+                array_push($sudokuArreglo,$sudokuFila);
+                $contCol=0;
+               $sudokuFila=array();
             }
-            if($filaTab<3){
-                echo "<br>"."======================"."<br>";
-            }
+           
         }
-      
+      return $sudokuArreglo;
 }
 
     public function llenarTablero($arreglo)
