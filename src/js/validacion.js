@@ -129,7 +129,7 @@ btnResolver.addEventListener("click", (e) => {
     fila = [];
   }
   contador = 0;
-  c/*onsole.log(inputValues);*/
+  /*console.log(inputValues);*/
   $.ajax({
     url: '../resolver.php', // Ruta al archivo PHP
     method: 'POST',
