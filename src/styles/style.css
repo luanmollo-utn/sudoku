@@ -1,25 +1,40 @@
 *{
-    padding: 0;
-    margin: 0;
-    box-sizing: content-box;
+  padding: 0;
+  margin: 0;
+  box-sizing: content-box;
 }
 
 input[readonly]{
-    background-color: rgba(135, 62, 230, 0.87);
-    color:lightgray;
-    font-weight: bold;
-    
+  background-color: rgba(135, 62, 230, 0.87);
+  color:lightgray;
+  font-weight: bold;
+  
 }
 
 
-  .custom-input {
-    outline: 2px solid #ccc;
-    width:2rem;
-    height: 2rem;
-    font-weight: bold;
-  }
-  
-  .custom-input-focus {
-   outline-color: orange;
-    /*background-color: lightgray;*/
-  }
+.custom-input {
+  outline: 2px solid #ccc;
+  width:2rem;
+  height: 2rem;
+  font-weight: bold;
+}
+
+.custom-input-focus {
+ outline-color: orange;
+  /*background-color: lightgray;*/
+}
+
+#inicio{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  gap: 5px;
+  background-color: indianred;
+  border-radius: 10px;
+
+}
+
+#tablero{
+  visibility: hidden;
+}

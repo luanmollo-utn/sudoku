@@ -1,3 +1,45 @@
+var tableroEnJuego;
+const btnJugar=document.getElementById('btnJugar');
+btnJugar.addEventListener('click',()=>{
+  let selectDificultad=document.getElementById('dificultad');
+  let dificultad=selectDificultad.value;
+  console.log(dificultad);
+  $.ajax({
+    url: '../generarTablero.php', // Ruta al archivo PHP
+    method: 'POST',
+    data: {
+      dificultad_elegida: dificultad
+    }, // Envía los valores de los inputs a PHP
+    success: function (response) {
+      let inicio=document.getElementById('inicio');
+      let tablero=document.getElementById('tablero');
+      inicio.style.display='none';
+      tablero.style.visibility='visible';
+      tableroEnJuego=response;
+      console.log(response);
+      var inputs = document.querySelectorAll('input');
+      let cont=0;
+      for(let i=0;i<9;i++){
+        for(let j=0;j<9;j++){
+          if(response[i][j]!=0){
+            inputs[cont].value=response[i][j];
+            inputs[cont].readOnly=true;
+          }else{
+            inputs[cont].value="";
+          }
+          
+          cont++;
+        }
+
+      }
+
+      // Aquí puedes manejar la respuesta de PHP
+     
+    }
+  });
+});
+
+
 
 var inputs = document.querySelectorAll('input');
 var inputValues = [];
@@ -117,6 +159,26 @@ inputs.forEach((input, index) => input.addEventListener('keyup', () => {
 }
 
 ));
+const btnResete = document.getElementById("reset");
+btnResete.addEventListener("click",(e)=>{
+  e.preventDefault();
+  var inputs = document.querySelectorAll('input');
+  let cont=0;
+  for(let i=0;i<9;i++){
+    for(let j=0;j<9;j++){
+      if(tableroEnJuego[i][j]!=0){
+        inputs[cont].value=tableroEnJuego[i][j];
+        inputs[cont].readOnly=true;
+      }else{
+        inputs[cont].value="";
+      }
+      
+      cont++;
+    }
+
+  }
+
+});
 const btnResolver = document.getElementById("resolver");
 btnResolver.addEventListener("click", (e) => {
   e.preventDefault()
@@ -129,7 +191,7 @@ btnResolver.addEventListener("click", (e) => {
     fila = [];
   }
   contador = 0;
-  /*console.log(inputValues);*/
+  console.log(inputValues);
   $.ajax({
     url: '../resolver.php', // Ruta al archivo PHP
     method: 'POST',
@@ -173,6 +235,5 @@ btnResolver.addEventListener("click", (e) => {
 });
 
 modifiedIndex = [];
-
 
 
