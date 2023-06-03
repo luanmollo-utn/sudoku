@@ -2,51 +2,72 @@
 require_once './src/Celda.php';
 require_once './src/Cuadricula.php';
 require_once './src/Tablero.php';
+
+//Recibimos la info del dom para procesarla
 $inputValues = $_POST['input_values'];
-$modifiedIndex=$_POST['modified_index'];
-//echo "Valor modificado: ".$inputValues[$modifiedIndex[0]][$modifiedIndex[1]]."<br>";
-$filaTab=floor($modifiedIndex[0]/3);
-//echo "Fila Tab: ".$filaTab."<br>";
-$colTab=floor($modifiedIndex[1]/3);
-//echo "Columna Tab: ".$colTab."<br>";
-if($modifiedIndex[0]<3){
-  $filaCuad=$modifiedIndex[0];
-  //echo "Fila cuad: ".$filaCuad."<br>";
-}else if($modifiedIndex[0]<6){
-  $filaCuad=$modifiedIndex[0]-3;
-  //echo "Fila cuad: ".$filaCuad."<br>";
-}else{
-  $filaCuad=$modifiedIndex[0]-6;
-  //echo "Fila cuad: ".$filaCuad."<br>";
-}
-if($modifiedIndex[1]<3){
-  $colCuad=$modifiedIndex[1];
-  //echo "Col cuad: ".$colCuad."<br>";
-}else if($modifiedIndex[1]<6){
-  $colCuad=$modifiedIndex[1]-3;
- // echo "Col cuad: ".$colCuad."<br>";
-}else{
-  $colCuad=$modifiedIndex[1]-6;
-  //echo "Col cuad: ".$colCuad."<br>";
-}
+$modifiedIndex = $_POST['modified_index'];
 
+//Convertimos los indices para trabajar con nuestro modelo de objeto
+if ($inputValues[$modifiedIndex[count($modifiedIndex) - 1][0]][$modifiedIndex[count($modifiedIndex) - 1][1]] != 0) {
+  $filaTab = floor($modifiedIndex[count($modifiedIndex) - 1][0] / 3);
+  $colTab = floor($modifiedIndex[count($modifiedIndex) - 1][1] / 3);
+  if ($modifiedIndex[count($modifiedIndex) - 1][0] < 3) {
+    $filaCuad = $modifiedIndex[count($modifiedIndex) - 1][0];
+  } else if ($modifiedIndex[count($modifiedIndex) - 1][0] < 6) {
+    $filaCuad = $modifiedIndex[count($modifiedIndex) - 1][0] - 3;
+  } else {
+    $filaCuad = $modifiedIndex[count($modifiedIndex) - 1][0] - 6;
+  }
+  if ($modifiedIndex[count($modifiedIndex) - 1][1] < 3) {
+    $colCuad = $modifiedIndex[count($modifiedIndex) - 1][1];
+  } else if ($modifiedIndex[count($modifiedIndex) - 1][1] < 6) {
+    $colCuad = $modifiedIndex[count($modifiedIndex) - 1][1] - 3;
+  } else {
+    $colCuad = $modifiedIndex[count($modifiedIndex) - 1][1] - 6;
+  }
 
-$tablero=new Tablero();
-$tablero->llenarTablero($inputValues);
+  //Instanciamos el objeto y lo cargamos
+  $tablero = new Tablero();
+  $tablero->llenarTablero($inputValues);
+  //usamos metodo de validacion del objeto
+  $response = $tablero->esValido($filaTab, $colTab, $filaCuad, $colCuad, $inputValues[$modifiedIndex[count($modifiedIndex) - 1][0]][$modifiedIndex[count($modifiedIndex) - 1][1]]);
 
-  $response =$tablero->esValido($filaTab,$colTab,$filaCuad,$colCuad,$inputValues[$modifiedIndex[0]][$modifiedIndex[1]]);
-
-//$tablero->imprimirSudokuOB();
-// Realiza la validación con los valores de los inputs
-// ...
-
-// Ejemplo de validación básica: si todos los valores son "validos"
-/*if (array_search('invalido', $inputValues) === false) {
-  $response = 'Los valores son válidos'; // Puedes personalizar el mensaje de respuesta
+  // Envía la respuesta al JavaScript
+  echo $response;
 } else {
-  $response = 'Al menos uno de los valores no es válido'; // Puedes personalizar el mensaje de respuesta
-}*/
+  //si se borro un valor validamos que los que quedaron sean correctos
+  $tablero = new Tablero();
+  $tablero->llenarTablero($inputValues);
+  for ($i = 0; $i < count($modifiedIndex) - 1; $i++) {
+    $filaTab = floor($modifiedIndex[$i][0] / 3);
 
-// Envía la respuesta al JavaScript
-echo $response;
-?>
+    $colTab = floor($modifiedIndex[$i][1] / 3);
+    if ($modifiedIndex[$i][0] < 3) {
+      $filaCuad = $modifiedIndex[$i][0];
+    } else if ($modifiedIndex[$i][0] < 6) {
+      $filaCuad = $modifiedIndex[$i][0] - 3;
+    } else {
+      $filaCuad = $modifiedIndex[$i][0] - 6;
+    }
+    if ($modifiedIndex[$i][1] < 3) {
+      $colCuad = $modifiedIndex[$i][1];
+    } else if ($modifiedIndex[$i][1] < 6) {
+      $colCuad = $modifiedIndex[$i][1] - 3;
+    } else {
+      $colCuad = $modifiedIndex[$i][1] - 6;
+    }
+
+    if (!$tablero->esValido($filaTab, $colTab, $filaCuad, $colCuad, $inputValues[$modifiedIndex[$i][0]][$modifiedIndex[$i][1]])) {
+      array_push($modifiedIndex[$i], 0);
+    } else {
+      array_push($modifiedIndex[$i], 1);
+    }
+  }
+  $responseJSON = json_encode($modifiedIndex);
+
+  // Establecer las cabeceras para indicar que la respuesta es JSON
+  header('Content-Type: application/json');
+
+  // Enviar la respuesta JSON al cliente
+  echo $responseJSON;
+}

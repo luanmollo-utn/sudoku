@@ -1,9 +1,11 @@
 var tableroEnJuego;
-const btnJugar=document.getElementById('btnJugar');
-btnJugar.addEventListener('click',()=>{
-  let selectDificultad=document.getElementById('dificultad');
-  let dificultad=selectDificultad.value;
+const btnJugar = document.getElementById('btnJugar');
+//Generamos escucha para boton jugar y generar el tablero
+btnJugar.addEventListener('click', () => {
+  let selectDificultad = document.getElementById('dificultad');
+  let dificultad = selectDificultad.value;
   console.log(dificultad);
+  //Enviamos peticion ajax a generarTablero con el nivel de dificultad elegido
   $.ajax({
     url: '../generarTablero.php', // Ruta al archivo PHP
     method: 'POST',
@@ -11,36 +13,34 @@ btnJugar.addEventListener('click',()=>{
       dificultad_elegida: dificultad
     }, // Envía los valores de los inputs a PHP
     success: function (response) {
-      let inicio=document.getElementById('inicio');
-      let tablero=document.getElementById('tablero');
-      inicio.style.display='none';
-      tablero.style.visibility='visible';
-      tableroEnJuego=response;
+      //ocultamos el menu de seleccion de dificultad y cargamos el tablero
+      let inicio = document.getElementById('inicio');
+      let tablero = document.getElementById('tablero');
+      inicio.style.display = 'none';
+      tablero.style.visibility = 'visible';
+      tableroEnJuego = response;
       console.log(response);
       var inputs = document.querySelectorAll('input');
-      let cont=0;
-      for(let i=0;i<9;i++){
-        for(let j=0;j<9;j++){
-          if(response[i][j]!=0){
-            inputs[cont].value=response[i][j];
-            inputs[cont].readOnly=true;
-          }else{
-            inputs[cont].value="";
+      let cont = 0;
+      for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+          if (response[i][j] != 0) {
+            inputs[cont].value = response[i][j];
+            inputs[cont].readOnly = true;
+          } else {
+            inputs[cont].value = "";
           }
-          
+
           cont++;
         }
 
       }
-
-      // Aquí puedes manejar la respuesta de PHP
-     
     }
   });
 });
 
 
-
+//definimos variables para manejar eventos del tablero
 var inputs = document.querySelectorAll('input');
 var inputValues = [];
 var inputFocus = [];
@@ -49,6 +49,7 @@ let indexEvent;
 let contador = 0;
 var modifiedIndex = [];
 var indiceFocus = [];
+//evento para cambiar el borde de las celda seleccionada y su grupo
 inputs.forEach((input, index) => input.addEventListener('focus', () => {
   indiceFocus = [];
   for (let i = 0; i < 9; i++) {
@@ -57,7 +58,7 @@ inputs.forEach((input, index) => input.addEventListener('focus', () => {
       if (index == contador) {
         indiceFocus.push(i);
         indiceFocus.push(j);
-        console.log(indiceFocus);
+        console.log("Indice focus " + indiceFocus);
       }
 
       contador++;
@@ -81,7 +82,8 @@ inputs.forEach((input, index) => input.addEventListener('focus', () => {
 
   }
 
-}))
+}));
+//Evento de escucha para quitar el borde cuando nos corremos a otra celda
 inputs.forEach((input, index) => input.addEventListener('focusout', () => {
   indiceFocus = [];
   for (let i = 0; i < 9; i++) {
@@ -90,7 +92,7 @@ inputs.forEach((input, index) => input.addEventListener('focusout', () => {
       if (index == contador) {
         indiceFocus.push(i);
         indiceFocus.push(j);
-        console.log(indiceFocus);
+        console.log("indice focusout " + indiceFocus);
       }
 
       contador++;
@@ -114,15 +116,18 @@ inputs.forEach((input, index) => input.addEventListener('focusout', () => {
   }
 }));
 
+//Evnto de escucha ante cambio de contnido en las celdas
 inputs.forEach((input, index) => input.addEventListener('keyup', () => {
   console.log(index);
-  //indexEvent=index;
+  let focus = []
+  //armamos la info en arreglo de 9x9 y almacnamos la info de la celda modificada
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
       inputs[contador].value == "" ? fila[j] = 0 : fila[j] = parseInt(inputs[contador].value);
       if (index == contador) {
-        modifiedIndex.push(i);
-        modifiedIndex.push(j);
+        focus.push(i);
+        focus.push(j);
+        modifiedIndex.push(focus);
       }
       contador++;
     }
@@ -130,8 +135,9 @@ inputs.forEach((input, index) => input.addEventListener('keyup', () => {
     fila = [];
   }
   contador = 0;
-  console.log(inputValues);
-  console.log(modifiedIndex);
+  //console.log(inputValues);
+  //console.log(modifiedIndex);
+  //Enviamos la info a validar.php para que nos diga si esta bien el numero o no
   $.ajax({
     url: '../validar.php', // Ruta al archivo PHP
     method: 'POST',
@@ -140,51 +146,65 @@ inputs.forEach((input, index) => input.addEventListener('keyup', () => {
       modified_index: modifiedIndex
     }, // Envía los valores de los inputs a PHP
     success: function (response) {
-      // Aquí puedes manejar la respuesta de PHP
+      //manejamos respuesta
       console.log(response);
-      if (response == "") {
-        console.log(modifiedIndex);
-        inputs[modifiedIndex[0] * 9 + modifiedIndex[1]].style.color = "red";
-        modifiedIndex = [];
+      if (response == 1 || response == "") {
+        if (response == "") {
+          console.log(modifiedIndex);
+          inputs[modifiedIndex[modifiedIndex.length - 1][0] * 9 + modifiedIndex[modifiedIndex.length - 1][1]].style.color = "red";
+
+        } else {
+          inputs[modifiedIndex[modifiedIndex.length - 1][0] * 9 + modifiedIndex[modifiedIndex.length - 1][1]].style.color = "black";
+        }
+
       } else {
-        inputs[modifiedIndex[0] * 9 + modifiedIndex[1]].style.color = "black";
-        modifiedIndex = [];
-        if (!Array.from(inputs).some(input => input.value == '')) {
-          alert("has ganado");
+        console.log(response);
+        Array.from(response).forEach(par => {
+          if (par[2] == 1) {
+
+            inputs[parseInt(par[0]) * 9 + parseInt(par[1])].style.color = "black";
+          } else {
+            inputs[parseInt(par[0]) * 9 + parseInt(par[1])].style.color = "red"
+          }
+        });
+        if (!Array.from(inputs).some(input => input.value == '' && input.style.color != "red")) {
+          alert("HAS GANADO");
         }
       }
     }
   });
-  //modifiedIndex=[];
+
 }
 
 ));
+//Manejamos evento de boton reset
 const btnResete = document.getElementById("reset");
-btnResete.addEventListener("click",(e)=>{
+btnResete.addEventListener("click", (e) => {
   e.preventDefault();
   var inputs = document.querySelectorAll('input');
-  let cont=0;
-  for(let i=0;i<9;i++){
-    for(let j=0;j<9;j++){
-      if(tableroEnJuego[i][j]!=0){
-        inputs[cont].value=tableroEnJuego[i][j];
-        inputs[cont].readOnly=true;
-      }else{
-        inputs[cont].value="";
+  let cont = 0;
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (tableroEnJuego[i][j] != 0) {
+        inputs[cont].value = tableroEnJuego[i][j];
+        inputs[cont].readOnly = true;
+      } else {
+        inputs[cont].value = "";
       }
-      
+
       cont++;
     }
 
   }
 
 });
+//Manejamos evento de boton resolver
 const btnResolver = document.getElementById("resolver");
 btnResolver.addEventListener("click", (e) => {
   e.preventDefault()
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
-      inputs[contador].readOnly ? fila[j] = parseInt(inputs[contador].value):fila[j] = 0;
+      inputs[contador].readOnly ? fila[j] = parseInt(inputs[contador].value) : fila[j] = 0;
       contador++;
     }
     inputValues[i] = fila;
@@ -197,15 +217,16 @@ btnResolver.addEventListener("click", (e) => {
     method: 'POST',
     data: { input_values: inputValues }, // Envía los valores de los inputs a PHP
     success: function (response) {
-      // Aquí puedes manejar la respuesta de PHP
+      // Manejamos la respuesta del tablero
       console.log(response);
       let form = document.getElementById("tablero");
 
       let divBtn = document.createElement("div");
-      let btnJugar=document.createElement("button");
-      btnJugar.textContent="Volver a Jugar";
-      btnJugar.classList.add("btn","btn-warning");
-      btnJugar.setAttribute("id","volverAJugar");
+      divBtn.classList.add("my-2");
+      let btnJugar = document.createElement("button");
+      btnJugar.textContent = "Volver a Jugar";
+      btnJugar.classList.add("btn", "btn-warning");
+      btnJugar.setAttribute("id", "volverAJugar");
       divBtn.appendChild(btnJugar);
       form.innerHTML = "";
       for (let i = 0; i < 9; i++) {
@@ -234,6 +255,6 @@ btnResolver.addEventListener("click", (e) => {
 
 });
 
-modifiedIndex = [];
+
 
 

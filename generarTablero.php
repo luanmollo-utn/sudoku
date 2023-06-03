@@ -1,4 +1,5 @@
 <?php
+//resibimos nivel de dificultad elegido en el dom
 $dificultad=$_POST['dificultad_elegida'];
 // Función para generar un tablero de sudoku aleatorio válido con diferentes niveles de dificultad
 function generarTableroAleatorio($dificultad) {
